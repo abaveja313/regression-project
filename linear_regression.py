@@ -4,10 +4,21 @@ import numpy as np
 from time import sleep
 from sklearn import datasets, linear_model
 
-print "______________________________________________"
-print "Running... Using Default Machine Learning Model"
-print "(c) Copyright 2016, Amrit Baveja, All Rights Reserved"
+class c:
+    header = '\033[95m'
+    blue = '\033[94m'
+    green = '\033[92m'
+    yellow = '\033[93m'
+    red = '\033[91m'
+    end = '\033[0m'
+    bold = '\033[1m'
+    underline = '\033[4m'
 
+print "______________________________________________"
+print c.green + c.bold + "Running... Using Default Machine Learning Model" + c.end + c.end
+sleep(4)
+print c.header + c.bold + "(c) Copyright 2016, Amrit Baveja, All Rights Reserved" + c.end + c.end
+sleep(3)
 def get_data(file_name):
     data = pd.read_csv(file_name)
     Y_parameter = []
@@ -18,38 +29,40 @@ def get_data(file_name):
         X_parameter.append([float(o)])
     return X_parameter, Y_parameter
 
-xorx2 = raw_input('Would you like to use Y or Y^2 for this regression\n')
+xorx2 = raw_input(c.yellow + 'Would you like to use Y or Y^2 for this regression\n' + c.end)
 
 if str(xorx2) == "y":
     X,Y = get_data('reg-reloaded.csv')
+    print c.blue + "Retrieving Regular Data from CSV file (reg-reloaded.csv)..." + c.end
+    sleep(1)
+    print c.green + "Done" + c.end
     t = False
 elif str(xorx2) == "y^2":
     X,Y = get_data('reg-sq-reloaded.csv')
+    print c.blue + "Retrieving Squared Data from CSV file (reg-sq-reloaded.csv)..." + c.end
+    sleep(1)
+    print c.green + "Done" + c.end
     t = True
 else:
-    raise
+    raise SystemError
 
 x = np.array(X)
 y = np.array(Y)
 
-print "X Data: " + str(x)
-sleep(1)
-print "Y Data: " + str(y)
-sleep(1.23)
 print "----------------------------------"
-print "X shape: {0}".format(str(x.shape))
-sleep(2.1)
-print "Y shape: {0}".format(str(y.shape))
-sleep(3)
+print c.header + "X shape: {0}".format(str(x.shape)) +  c.end
+sleep(1)
+print c.yellow + "Y shape: {0}".format(str(y.shape)) + c.end
+sleep(1)
 print "----------------------------------"
 
 def linear_model_main(X_parameters,Y_parameters,predict_value):
     regr = linear_model.LinearRegression()
     regr.fit(X_parameters, Y_parameters)
     print "----------------------------------"
-    print "R^2: " + str(regr.score(X_parameters, Y_parameters))
-    sleep(0.4)
-    print "Compatibility (R^2 * 100): " + str(regr.score(X_parameters, Y_parameters) * 100)
+    print c.bold + c.green + "R^2: " + str(regr.score(X_parameters, Y_parameters)) + c.end + c.end
+    sleep(1.0)
+    print c.yellow + c.bold + "Compatibility (R^2 * 100): " + str(round(regr.score(X_parameters, Y_parameters) * 100))+ "%" + c.end + c.end
     print "----------------------------------"
     predict_outcome = regr.predict(predict_value)
     predictions = {}
@@ -58,61 +71,67 @@ def linear_model_main(X_parameters,Y_parameters,predict_value):
     predictions['predicted_value'] = predict_outcome
     return predictions
     print "----------------------------------"
-
-predictvalue = float(raw_input("Enter a value for [PC Unit Sales]\n")) 
+print c.green + "If you enter a value for PC Unit Sales, the program can give you the smartphone Unit Sales" + c.end
+sleep(0.8)
+predictvalue = float(raw_input(c.red + "Enter a value for [PC Unit Sales]\n" + c.end)) 
 
 if t:
     predictvalue = predictvalue * predictvalue
-    print predictvalue
+    print c.blue + "Squaring Input" + c.end
+    sleep(1)
+    print c.red + "Squared Input: " + str(predictvalue) + c.end
 result = linear_model_main(x,y,predictvalue)
 
-print "Using linear model to calculate"
-sleep(0.4)
-print "."
-sleep(0.6)
-print ".."
-sleep(0.9)
-print "..."
-sleep(0.3)
-print "-----------------------"
-print "Estimated Predicted value: " + str(round(result['predicted_value'] )) + " Million"
-print "-----------------------"
-print "Exact Value: " + str(result['predicted_value']) + " Million"
-print "---------------------------"
-sleep(0.8)
-print "Intercept value " + str(result["intercept"])
-sleep(0.3)
-print "Coefficient" + str(result["coefficient"])
-sleep(0.4)
+print  "Using linear model to calculate"
+sleep(2)
 op = " + "
 
 if int(result['intercept']) < 0:
     op = ""
+print "-------------------------"
+if xorx2 == "y":
+    ymxb = "Line equation: y = " + str(result['coefficient']) + "x" + op + str(result['intercept'])
+    ymxb = str(ymxb).replace('[','').replace(']','')
+elif xorx2 == "y^2":
+    ymxb = "Line equation: y = " + str(result['coefficient']) + "x^2" + op + str(result['intercept'])
+    ymxb = str(ymxb).replace('[','').replace(']','')
 
-ymxb = "Line equation: y = " + str(result['coefficient']) + "x" + op + str(result['intercept'])
-ymxb = str(ymxb).replace('[','').replace(']','')
-
-print ymxb
+print c.yellow+ c.bold + ymxb + c.end + c.end
+sleep(1)
+print "-----------------------"
+print c.header + c.bold + "Rounded Predicted value: " + str(round(result['predicted_value'] )) + " Million" + c.end + c.end
+print "-----------------------"
+sleep(2)
+tex = c.green + c.bold + "Exact Value: " + str(result['predicted_value']) + " Million" + c.end + c.end
+print tex
 print "--------------------------"
-print "If you enter a value for PC Unit Sales, the program can give you the smartphone Unit Sales"
-
+sleep(1)
 def try_again():
-    t = raw_input("Would you like to test another time using the linear model generated by this regression?\n You can also enter [see graph] to see a graph\n")
+    sleep(1)
+    t = raw_input(c.yellow + "Would you like to test another time using the linear model generated by this regression?\n You can also enter [see graph] to see a graph\n" + c.end)
     if str(t) == "yes":
         print "----------------------------"
-        predictvalue = float(raw_input("Enter a value for [PC Unit sales]\n"))
-        sleep(0.5)
-        print "Estimated Predicted value: " + str(round(result['predicted_value'] )) + " Million"
+        sleep(1.3)
+        predictvalue = float(raw_input(c.red + "Enter a value for [PC Unit sales]\n" + c.end))
+        sleep(2)
+        print "----------------------"
+        print c.header + c.bold + "Estimated Predicted value: " + str(round(result['predicted_value'] )) + " Million" + c.end + c.end
+        sleep(2)
         print "-----------------------"
-        print "Exact Value: " + str(result['predicted_value'])
+        print c.green + c.bold + "Exact Value: " + str(result['predicted_value']) + c.end + c.end
         try_again()
 
     elif str(t) == "see graph":
-        
         def show_linear_line(X_parameters,Y_parameters):
             regr = linear_model.LinearRegression()
+            print c.green + "Creating Regression" + c.end
+            sleep(1)
             regr.fit(X_parameters, Y_parameters)
+            print c.yellow + "Fitting Data" + c.end
+            sleep(1.3)
             plt.scatter(X_parameters,Y_parameters,color='blue')
+            print c.header + "Scattering Data" + c.end
+            sleep(1)
             if str(xorx2) == "y":
                  plt.ylabel('PC Unit Sales (In Millions)')
             elif str(xorx2) == "y^2":
@@ -125,13 +144,12 @@ def try_again():
             plt.plot(X_parameters,regr.predict(X_parameters),color='black',linewidth=2)
             plt.margins(0.2)
             plt.subplots_adjust(bottom=0.15)
-            plt.xticks(x)
-            plt.yticks(y)
+            print c.green + "Opening Graph" + c.end
             plt.show()
         show_linear_line(x,y)
 
     elif str(t)=="no":
         quit
     else:
-        raise
+        raise SystemError
 try_again()
