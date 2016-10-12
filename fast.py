@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 from time import sleep
 from sklearn import datasets, linear_model
+from sklearn.preprocessing import PolynomialFeatures
 
 class c:
     header = '\033[95m'
@@ -42,8 +43,8 @@ elif str(xorx2) == "y^2":
 else:
     raise SystemError
 
-x = np.array(X)
-y = np.array(Y)
+x = np.matrix(X)
+y = np.matrix(Y)
 
 print "----------------------------------"
 print c.header + "X shape: {0}".format(str(x.shape)) +  c.end
